@@ -98,15 +98,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4b82cf0babdbd58558212896d1a4272303a57bdb245c2bf1147185fb45640e70"
 
 [[package]]
-name = "clis"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "thiserror",
-]
-
-[[package]]
 name = "colorchoice"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -157,6 +148,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "template-cli-rs"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "thiserror",
 ]
 
 [[package]]

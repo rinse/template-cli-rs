@@ -9,12 +9,17 @@ pub struct Cli {
 
 #[derive(Debug, PartialEq, Eq, Subcommand)]
 pub enum Command {
-    Echo {
-        message: Vec<String>,
-        #[arg(short)]
-        n: bool,
+    Branch {
+        branch_name: String,    // Branch name is required
+        #[clap(short)]
+        d: bool,                // Delete branch
+    },
+    Commit {
+        #[clap(short)]
+        m: Option<String>,      // Optionally takes a message
     },
     Export {
+        #[arg(short, long, value_enum)]
         format: ExportFormat,
     },
 }
@@ -30,30 +35,50 @@ mod tests {
     use super::*;
 
     #[test]
-    fn echo() {
-        let cli = Cli::parse_from(vec!["prog", "echo", "Hello", "World"]);
+    fn commit() {
+        let cli = Cli::parse_from(vec!["prog", "commit"]);
         assert_eq!(cli, Cli {
-            command: Command::Echo {
-                message: ["Hello", "World"].map(|e| e.to_string()).into_iter().collect(),
-                n: false,
+            command: Command::Commit {
+                m: None,
             }
         })
     }
 
     #[test]
-    fn echo_n() {
-        let cli = Cli::parse_from(vec!["prog", "echo", "-n", "Hello", "World"]);
+    fn commit_message() {
+        let cli = Cli::parse_from(vec!["prog", "commit", "-m", "Hello, World"]);
         assert_eq!(cli, Cli {
-            command: Command::Echo {
-                message: ["Hello", "World"].map(|e| e.to_string()).into_iter().collect(),
-                n: true,
+            command: Command::Commit {
+                m: Some("Hello, World".to_string()),
+            }
+        })
+    }
+
+    #[test]
+    fn branch() {
+        let cli = Cli::parse_from(vec!["prog", "branch", "dev"]);
+        assert_eq!(cli, Cli {
+            command: Command::Branch {
+                branch_name: "dev".to_string(),
+                d: false,
+            },
+        })
+    }
+
+    #[test]
+    fn delete_branch() {
+        let cli = Cli::parse_from(vec!["prog", "branch", "-d", "dev"]);
+        assert_eq!(cli, Cli {
+            command: Command::Branch {
+                branch_name: "dev".to_string(),
+                d: true,
             },
         })
     }
 
     #[test]
     fn export() {
-        let cli = Cli::parse_from(vec!["prog", "export", "yaml"]);
+        let cli = Cli::parse_from(vec!["prog", "export", "--format", "yaml"]);
         assert_eq!(cli, Cli {
             command: Command::Export {
                 format: ExportFormat::Yaml,
