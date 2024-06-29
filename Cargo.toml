@@ -1,5 +1,5 @@
 [package]
-name = "clis"
+name = "template-cli-rs"
 version = "0.1.0"
 edition = "2021"
 authors = ["rinse <rinse418@gmail.com>"]
